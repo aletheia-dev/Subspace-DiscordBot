@@ -17,7 +17,7 @@ Discord Server:
 
 DiscordBot.ini:
 - set 'BotToken' to the bot token from Discord Developer Portal > Reset Token
-  BotToken=MTMyNjY0MjgxODUwMzkzODE2MQ.G3qjwW.SRXysdowGnHXGIQuPzQorU-klzE1slc50UGyUw
+  BotToken=
 - set 'ServerId' to the value of menu item *Discord Server* > Copy ID
 - set 'ChatChannelId' to the value of menu item *Channel* > Copy ID
 - set combinations for 'SpecialFunctions':
