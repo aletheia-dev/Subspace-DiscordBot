@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\DllMain.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Subspace.ixx">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Config.ixx">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Algorithms.ixx">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Commands.ixx">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Events.ixx">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Discord.ixx">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Recording.ixx">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config\DiscordBot.INI">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="res\DiscordBot.ahk">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="res\MonitorBot.ahk">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="res\ContinuumBot.ahk">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="res\RecBot.ahk">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\CHANGES.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+    <Text Include="res\README.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+    <Text Include="config\MessageBlacklist.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+    <Text Include="config\DiscordUserLinks.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+    <Text Include="res\RELEASE.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+    <Text Include="config\Operators.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
