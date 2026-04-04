@@ -2,8 +2,7 @@
  *
  * D++, A Lightweight C++ library for Discord
  *
- * SPDX-License-Identifier: Apache-2.0
- * Copyright 2021 Craig Edwards and D++ contributors 
+ * Copyright 2022 Craig Edwards and D++ contributors 
  * (https://github.com/brainboxdotcc/DPP/graphs/contributors)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,51 +18,29 @@
  * limitations under the License.
  *
  ************************************************************************************/
-
 #pragma once
 #include <dpp/export.h>
-#include <dpp/snowflake.h>
-#include <dpp/json_fwd.h>
-#include <dpp/json_interface.h>
-#include <unordered_map>
+#include <utility>
 
 namespace dpp {
 
 /**
- * @brief The ban class represents a ban on a guild.
- * 
+ * @brief Run some code within an if() statement only once.
+ *
+ * Use this template like this:
+ *
+ * ```
+ * if (dpp::run_once<struct any_unique_name_you_like_here>()) {
+ *     // Your code here
+ * }
+ * ```
+ *
+ * @tparam T any unique 'tag' identifier name
+ * @return auto a true/false return to say if we should execute or not
  */
-class DPP_EXPORT ban : public json_interface<ban> {
-protected:
-	friend struct json_interface<ban>;
-
-	/** Read class values from json object
-	 * @param j A json object to read from
-	 * @return A reference to self
-	 */
-	ban& fill_from_json_impl(nlohmann::json* j);
-
-public:
-	/**
-	 * @brief The ban reason.
-	 */
-	std::string reason;
-
-	/**
-	 * @brief User ID the ban applies to.
-	 */
-	snowflake user_id;
-
-	/** Constructor */
-	ban();
-
-	/** Destructor */
-	virtual ~ban() = default;
+template <typename T> auto run_once() {
+	static auto called = false;
+	return !std::exchange(called, true);
 };
-
-/**
- * @brief A group of bans. The key is the user ID.
- */
-typedef std::unordered_map<snowflake, ban> ban_map;
 
 } // namespace dpp

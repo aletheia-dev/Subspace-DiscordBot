@@ -19,51 +19,15 @@
  * limitations under the License.
  *
  ************************************************************************************/
-
 #pragma once
-#include <dpp/export.h>
-#include <dpp/snowflake.h>
-#include <dpp/json_fwd.h>
-#include <dpp/json_interface.h>
-#include <unordered_map>
 
-namespace dpp {
-
-/**
- * @brief The ban class represents a ban on a guild.
+/* This file contains pragmas to disable warnings on win32 builds with msvc only.
+ * It is only included during build of D++ itself, and not when including the headers
+ * into a user's project.
  * 
+ * Before adding a warning here please be ABSOLUTELY SURE it is one we cannot easily fix
+ * and is to be silenced, thrown into the sarlacc pit to be eaten for 1000 years...
  */
-class DPP_EXPORT ban : public json_interface<ban> {
-protected:
-	friend struct json_interface<ban>;
 
-	/** Read class values from json object
-	 * @param j A json object to read from
-	 * @return A reference to self
-	 */
-	ban& fill_from_json_impl(nlohmann::json* j);
-
-public:
-	/**
-	 * @brief The ban reason.
-	 */
-	std::string reason;
-
-	/**
-	 * @brief User ID the ban applies to.
-	 */
-	snowflake user_id;
-
-	/** Constructor */
-	ban();
-
-	/** Destructor */
-	virtual ~ban() = default;
-};
-
-/**
- * @brief A group of bans. The key is the user ID.
- */
-typedef std::unordered_map<snowflake, ban> ban_map;
-
-} // namespace dpp
+_Pragma("warning( disable : 4251 )"); // 4251 warns when we export classes or structures with stl member variables
+_Pragma("warning( disable : 5105 )"); // 5105 is to do with macro warnings

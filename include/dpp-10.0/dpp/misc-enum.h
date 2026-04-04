@@ -19,51 +19,70 @@
  * limitations under the License.
  *
  ************************************************************************************/
-
 #pragma once
 #include <dpp/export.h>
-#include <dpp/snowflake.h>
-#include <dpp/json_fwd.h>
-#include <dpp/json_interface.h>
-#include <unordered_map>
+#include <stddef.h>
 
 namespace dpp {
 
 /**
- * @brief The ban class represents a ban on a guild.
- * 
+ * @brief Supported image types for profile pictures and CDN endpoints
  */
-class DPP_EXPORT ban : public json_interface<ban> {
-protected:
-	friend struct json_interface<ban>;
-
-	/** Read class values from json object
-	 * @param j A json object to read from
-	 * @return A reference to self
-	 */
-	ban& fill_from_json_impl(nlohmann::json* j);
-
-public:
+enum image_type {
 	/**
-	 * @brief The ban reason.
+	 * @brief image/png
 	 */
-	std::string reason;
+	i_png,
 
 	/**
-	 * @brief User ID the ban applies to.
+	 * @brief image/jpeg.
 	 */
-	snowflake user_id;
+	i_jpg,
 
-	/** Constructor */
-	ban();
+	/**
+	 * @brief image/gif.
+	 */
+	i_gif,
 
-	/** Destructor */
-	virtual ~ban() = default;
+	/**
+	 * @brief Webp.
+	 */
+	i_webp,
 };
 
 /**
- * @brief A group of bans. The key is the user ID.
+ * @brief Log levels
  */
-typedef std::unordered_map<snowflake, ban> ban_map;
+enum loglevel {
+	/**
+	 * @brief Trace
+	 */
+	ll_trace = 0,
+
+	/**
+	 * @brief Debug
+	 */
+	ll_debug,
+
+	/**
+	 * @brief Information
+	 */
+	ll_info,
+
+	/**
+	 * @brief Warning
+	 */
+	ll_warning,
+
+	/**
+	 * @brief Error
+	 */
+	ll_error,
+
+	/**
+	 * @brief Critical
+	 */
+	ll_critical
+};
 
 } // namespace dpp

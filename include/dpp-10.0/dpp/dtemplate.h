@@ -19,51 +19,97 @@
  * limitations under the License.
  *
  ************************************************************************************/
-
 #pragma once
 #include <dpp/export.h>
 #include <dpp/snowflake.h>
 #include <dpp/json_fwd.h>
-#include <dpp/json_interface.h>
 #include <unordered_map>
+#include <dpp/json_interface.h>
 
 namespace dpp {
 
 /**
- * @brief The ban class represents a ban on a guild.
- * 
+ * @brief Represents a guild template
  */
-class DPP_EXPORT ban : public json_interface<ban> {
+class DPP_EXPORT dtemplate : public json_interface<dtemplate> {
 protected:
-	friend struct json_interface<ban>;
+	friend struct json_interface<dtemplate>;
 
 	/** Read class values from json object
 	 * @param j A json object to read from
 	 * @return A reference to self
 	 */
-	ban& fill_from_json_impl(nlohmann::json* j);
+	dtemplate& fill_from_json_impl(nlohmann::json* j);
+
+	/**
+	 * @brief Build the JSON for this object
+	 *
+	 * @param with_id Add ID to output
+	 * @return json JSON content
+	 */
+	json to_json_impl(bool with_id = false) const;
 
 public:
 	/**
-	 * @brief The ban reason.
+	 * @brief Template code
 	 */
-	std::string reason;
+	std::string code;
 
 	/**
-	 * @brief User ID the ban applies to.
+	 * @brief Template name
 	 */
-	snowflake user_id;
+	std::string name;
 
-	/** Constructor */
-	ban();
+	/**
+	 * @brief Template description
+	 */
+	std::string description;
 
-	/** Destructor */
-	virtual ~ban() = default;
+	/**
+	 * @brief Usage counter
+	 */
+	uint32_t usage_count;
+
+	/**
+	 * @brief User ID of creator
+	 */
+	snowflake creator_id;
+
+	/**
+	 * @brief Creation date/time
+	 * 
+	 */
+	time_t created_at;
+
+	/**
+	 * @brief Last update date/time
+	 */
+	time_t updated_at;
+
+	/**
+	 * @brief Guild id the template is created from
+	 */
+	snowflake source_guild_id;
+
+	/**
+	 * @brief True if needs synchronising
+	 */
+	bool is_dirty;
+
+	/**
+	 * @brief Construct a new dtemplate object
+	 */
+	dtemplate();
+
+	/**
+	 * @brief Destroy the dtemplate object
+	 */
+	virtual ~dtemplate() = default;
 };
 
 /**
- * @brief A group of bans. The key is the user ID.
+ * @brief A container of invites
  */
-typedef std::unordered_map<snowflake, ban> ban_map;
+typedef std::unordered_map<snowflake, dtemplate> dtemplate_map;
 
 } // namespace dpp

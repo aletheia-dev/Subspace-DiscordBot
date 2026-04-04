@@ -19,51 +19,14 @@
  * limitations under the License.
  *
  ************************************************************************************/
-
-#pragma once
-#include <dpp/export.h>
-#include <dpp/snowflake.h>
-#include <dpp/json_fwd.h>
-#include <dpp/json_interface.h>
-#include <unordered_map>
+#ifdef DPP_USE_EXTERNAL_JSON
+	#include <nlohmann/json_fwd.hpp>
+#else
+	#include <dpp/nlohmann/json_fwd.hpp>
+#endif
 
 namespace dpp {
 
-/**
- * @brief The ban class represents a ban on a guild.
- * 
- */
-class DPP_EXPORT ban : public json_interface<ban> {
-protected:
-	friend struct json_interface<ban>;
+using json = nlohmann::json;
 
-	/** Read class values from json object
-	 * @param j A json object to read from
-	 * @return A reference to self
-	 */
-	ban& fill_from_json_impl(nlohmann::json* j);
-
-public:
-	/**
-	 * @brief The ban reason.
-	 */
-	std::string reason;
-
-	/**
-	 * @brief User ID the ban applies to.
-	 */
-	snowflake user_id;
-
-	/** Constructor */
-	ban();
-
-	/** Destructor */
-	virtual ~ban() = default;
-};
-
-/**
- * @brief A group of bans. The key is the user ID.
- */
-typedef std::unordered_map<snowflake, ban> ban_map;
-
-} // namespace dpp
+}

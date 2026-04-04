@@ -19,51 +19,14 @@
  * limitations under the License.
  *
  ************************************************************************************/
-
 #pragma once
-#include <dpp/export.h>
-#include <dpp/snowflake.h>
-#include <dpp/json_fwd.h>
-#include <dpp/json_interface.h>
-#include <unordered_map>
 
-namespace dpp {
+#if !defined(DPP_VERSION_LONG)
+#define DPP_VERSION_LONG 0x00100029
+#define DPP_VERSION_SHORT 100029
+#define DPP_VERSION_TEXT "D++ 10.0.29 (05-Nov-2023)"
 
-/**
- * @brief The ban class represents a ban on a guild.
- * 
- */
-class DPP_EXPORT ban : public json_interface<ban> {
-protected:
-	friend struct json_interface<ban>;
-
-	/** Read class values from json object
-	 * @param j A json object to read from
-	 * @return A reference to self
-	 */
-	ban& fill_from_json_impl(nlohmann::json* j);
-
-public:
-	/**
-	 * @brief The ban reason.
-	 */
-	std::string reason;
-
-	/**
-	 * @brief User ID the ban applies to.
-	 */
-	snowflake user_id;
-
-	/** Constructor */
-	ban();
-
-	/** Destructor */
-	virtual ~ban() = default;
-};
-
-/**
- * @brief A group of bans. The key is the user ID.
- */
-typedef std::unordered_map<snowflake, ban> ban_map;
-
-} // namespace dpp
+#define DPP_VERSION_MAJOR ((DPP_VERSION_LONG & 0x00ff0000) >> 16)
+#define DPP_VERSION_MINOR ((DPP_VERSION_LONG & 0x0000ff00) >> 8)
+#define DPP_VERSION_PATCH (DPP_VERSION_LONG & 0x000000ff)
+#endif
