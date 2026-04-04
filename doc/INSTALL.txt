@@ -1,0 +1,31 @@
+Install
+-------
+
+Discord Developer Portal:
+- go to https://discord.com/developers/applications
+- create a new bot with the name DiscordBot
+- in Applications > DiscordBot > Bot, grant all three "Privileged Gateway 
+  Intents"
+- in Applications > DiscordBot > OAuth2 > URL Generator, authenticate the bot for the scopes 
+  "bot" and "application.commands" and Text Permissions "Send Messages", "Send Messages in Threads", "Send TTS Messages", "Manage Messages", "Pin Messages", "Read Message History", "Mention Everyone", "Use Slash Commands"
+- copy the "GENERATED URL" shown at the bottom of the page and enter it into a new browser tab.
+
+Discord Server:
+- create a new channel
+- in the channel permissions, grant "Create Public Threads" and "Use 
+  Application Commands"
+
+DiscordBot.ini:
+- set 'BotToken' to the bot token from Discord Developer Portal > Reset Token
+  BotToken=MTMyNjY0MjgxODUwMzkzODE2MQ.G3qjwW.SRXysdowGnHXGIQuPzQorU-klzE1slc50UGyUw
+- set 'ServerId' to the value of menu item *Discord Server* > Copy ID
+- set 'ChatChannelId' to the value of menu item *Channel* > Copy ID
+- set combinations for 'SpecialFunctions':
+  * to 'initsc', if Discord slash commands need to be initialized, used only once for a new server
+  * to 'recording', if the bot shall automatically do record matches
+  * to 'nodiscord', if the bot shall not connect to a Discord server
+  * to 'continuum', if the bot shall not transfer chat messages to or from the Discord channel
+
+Subspace:
+- Open Player profile for discobot
+- discobot Password: dancefloor

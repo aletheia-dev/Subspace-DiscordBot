@@ -1,0 +1,3 @@
+
+!help commando taucht in recording Messages auf!
+.spam bei noreporting funzt nicht?
