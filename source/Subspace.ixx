@@ -431,6 +431,11 @@ export void switchArena(bool isCyclincArena = false)
         return;
     }
 
+    if (c_switchArenas.size() == 1) {
+        // no switching if there is only one arena defined
+        return;
+    }
+
     g_isFindIssued = false;
     g_isFetchingPlayerNames = false;
 
