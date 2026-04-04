@@ -1,1 +1,11 @@
-
+; List of operators in the format <name> : <level>
+; Operator level:
+;    0 = Player
+;    1 = Limited
+;    2 = Moderator, needed for the !go command
+;    3 = SuperModerator
+;    4 = SysOp
+;    5 = Owner
+kdak : 2
+Captor : 2
+light+ : 2

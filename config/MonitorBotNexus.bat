@@ -1,0 +1,7 @@
+@echo off
+:Start
+"C:\Program Files (x86)\Continuum\DiscordBot Nexus\DiscordBot.exe"
+:: Wait 60 seconds before restarting.
+IF NOT EXIST "C:\Program Files (x86)\Continuum\DiscordBot Nexus\STOP_DISCORD_BOT" (
+	TIMEOUT /T 600
+	GOTO:Start)
