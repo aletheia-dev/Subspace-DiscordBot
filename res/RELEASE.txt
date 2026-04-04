@@ -1,0 +1,16 @@
+Build and Deploy
+----------------
+
+1. Increase the version <major>.<minor>.<bugfix>
+2. Build a release version, output is generated in subfolder _out
+3. Compile with AutoHotkey:
+   a. Start C:\Program Files\AutoHotkey\Compiler\Ahk2Exe
+   b. Select _out/DiscordBot as source file
+   c. Select res/DiscordBot.ico as file icon (if not preset)
+   d. Click "Convert"
+   e. Adapt the config parameters BotName and ChatChannelId in _out/DiscordBot.ini
+4. Deploy the release build:
+   a. Select all files in _out except DiscordBot.ahk (and DiscordBot.ini, in case the discobot folder already existed)
+   b. Connect via remote to 138.128.241.33
+   c. Create a new subfolder in C:\Program Files (x86)\Continuum according to the version number
+   d. Post the copied files into it
