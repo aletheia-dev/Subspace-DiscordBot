@@ -28,4 +28,4 @@ DiscordBot.ini:
 
 Subspace:
 - Open Player profile for discobot
-- discobot Password: dancefloor
+- discobot Password: <tanzfl.>

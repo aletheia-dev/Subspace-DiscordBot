@@ -118,15 +118,15 @@ void updatePlayerScore(std::string& player, bool isKilled)
 //////// Reporting Event handler ////////
 
 /// <summary>
-/// Send an .items command if either a match has just started or a configured time interval has 
-/// passed after the last request.
+/// Send an .items or ?items command if either a match has just started or a configured time 
+/// interval has passed after the last request.
 /// </summary>
 /// <param name="logMsg">Log message.</param>
 /// <param name="timeStamp">Current system time.</param>
 void checkEventRequestResults(std::string_view logMsg, TimeStamp& timeStamp)
 {
     if (!g_isFetchingPlayerNames && !g_isRecordingEnabled) {
-        if (!g_isReporting && logMsg.find("  GO!") != -1) {
+        if (logMsg.find("  GO!") != -1) {
             // a match has started with a GO! 
             g_team100Stats.clear();
             g_team200Stats.clear();
@@ -221,14 +221,16 @@ void checkEventPlayerStatsUpdateNexus(std::string_view logMsg, TimeStamp& timeSt
     std::string x;
 
     if (g_isReporting && logMsg.find("Freq ") != -1) {
-        if (logMsg.find("  Freq 10: ") == 0) {
+        if (!g_isFirstItemsFreqParsed && logMsg.find("  Freq ") == 0) {
             // update repeller and rocket stats of team 100
             parseItemsInfo(logMsg, g_team100Stats);
+            g_isFirstItemsFreqParsed = true;
         }
-        else if (logMsg.find("  Freq 11: ") == 0) {
+        else if (g_isFirstItemsFreqParsed && logMsg.find("  Freq ") == 0) {
             // update repeller and rocket stats of team 200
             parseItemsInfo(logMsg, g_team200Stats);
-            updatePlayersMessage();
+//            updatePlayersMessage();
+            g_isFirstItemsFreqParsed = false;
         }
     }
     else if (g_isReporting) {
@@ -266,6 +268,59 @@ void checkEventPlayerStatsUpdateNexus(std::string_view logMsg, TimeStamp& timeSt
                 g_team200Stats[returnedName].isLaggedOut = false;
             }
         }
+    }
+}
+
+
+/// <summary>
+/// Send an ?lsq command if the prac queue is not currently being parsed and a configured time 
+/// interval has passed after the last request.
+/// </summary>
+/// <param name="logMsg">Log message.</param>
+/// <param name="timeStamp">Current system time.</param>
+void checkEventRequestPracQueue(std::string_view logMsg, TimeStamp& timeStamp)
+{
+    if (g_isNexusEnabled 
+        && !g_arena.empty() && !g_isFetchingPlayerNames && !g_isRecordingEnabled) {
+        if (timeStamp - g_lastLsqRequestTimeStamp >= c_lsqRequestInterval) {
+            sendPublic("?lsq");
+            g_lastLsqRequestTimeStamp = std::chrono::system_clock::now();
+        }
+    }
+}
+
+
+/// <summary>
+/// Check for reply to ?lsq command to parse the prac queue on Nexus.
+/// </summary>
+/// <param name="logMsg">Log message.</param>
+/// <param name="timeStamp">Current system time.</param>
+/// <param name="isProcessed">True, if processing is finished in this main loop cycle, otherwise
+/// false.</param>
+void checkEventPracQueueUpdate(std::string_view logMsg, TimeStamp& timeStamp, bool& isProcessed)
+{
+    if (logMsg.find("  lsqueue: ") == 0) {
+        if (logMsg.find("No players queued") == -1) {
+            // there actually are queued players
+            std::string queuedCnt{ logMsg.substr(logMsg.find(" - ") + 3, 2) };
+
+            g_parseLsqCount = stoi(queuedCnt);
+        }
+        else {
+            updatePlayersMessage();
+        }
+        isProcessed = true;
+    }
+    else if (g_parseLsqCount > 0) {
+        std::vector<std::string> players{ split(logMsg, ',') };
+
+        g_playerPracQueue.clear();
+
+        for (std::string player : players) {
+            g_playerPracQueue.push_back(trim(player));
+        }
+        g_parseLsqCount = 0;
+        updatePlayersMessage();
     }
 }
 
@@ -1152,6 +1207,10 @@ export bool processEvents(std::string_view logMsg)
                 else {
                     checkEventPlayerStatsUpdateNexus(logMsg, timeStamp, isProcessed);
                 }
+                /// Check if it's time to send an ?lsq command to obtain the queued player list
+                checkEventRequestPracQueue(logMsg, timeStamp);
+                /// Check for reply to ?lsq command to parse the prac queue on Nexus
+                checkEventPracQueueUpdate(logMsg, timeStamp, isProcessed);
                 // check for the end of a match to stop reporting stats
                 checkEventEndReporting(logMsg);
             }

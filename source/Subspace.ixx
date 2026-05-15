@@ -317,20 +317,21 @@ export void login()
 
     // simulate press <return> to reenter the game
     sendPublic("");
-    sleep(7000);
-    /*
+    sleep(30000);
+    
     // switch to chat window
     if (!c_specialFunctions.contains("recording")) {
         sendKey("{ALT DOWN}{TAB}");
+        sleep(3000);
         // press tab while holding alt for a defined number of times
         for (uint32_t i = 1; i < c_altTabCount; i++) {
-            sleep(2000);
             sendKey("{TAB}");
+            sleep(1000);
         }
         sendKey("{ALT UP}");
-        sleep(5000);
+        sleep(4000);
     }
-    */
+    
 }
 
 
@@ -424,15 +425,15 @@ export void fetchNextSquadName()
 /// with the !go command.</param>
 export void switchArena(bool isCyclincArena = false)
 {
+    if (c_switchArenas.size() <= 1 && isCyclincArena) {
+        // no switching if there is only one or no switch arena defined
+        return;
+    }
+
     if (g_isContinuumEnabled) {
         // only issue a find command to obtain the current arena name
         sendPublic(std::format("?find {}", c_discordBotName));
         g_isFindIssued = true;
-        return;
-    }
-
-    if (c_switchArenas.size() == 1) {
-        // no switching if there is only one arena defined
         return;
     }
 

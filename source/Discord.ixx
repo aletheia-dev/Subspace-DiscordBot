@@ -61,7 +61,9 @@ const uint32_t c_maxDiscordMessageLength{ 1970 };
 const std::set<char> c_commandPrefixes{ '.', '!', '@', '/' };
 const std::set<std::string> c_unlinkedCommands{ "help", "about", "version" };
 // Duration in seconds to pause between .items info request for reporting player stats
-export CounterDuration c_itemsRequestInterval{ 5 };
+export CounterDuration c_itemsRequestInterval{ 4 };
+// Duration in seconds to pause between ?lsq info request for queued players on Nexus
+export CounterDuration c_lsqRequestInterval{ 4 };
 
 
 // Discord config objects - INI file
@@ -119,6 +121,14 @@ export std::string g_spamPlayerName;
 export bool g_isSpamInfoIssued{};
 // Buffer for the last transfered arena message to detect new spam messages
 export std::string g_lastArenaMessage{};
+// Flag to indicate if the first team freq as reply to an ?items request has been parsed
+export bool g_isFirstItemsFreqParsed{};
+// Timestamp for the last ?lsq request
+export TimeStamp g_lastLsqRequestTimeStamp;
+// Current counter for parsing the response to ?lsq (list queue) on Nexus
+export uint32_t g_parseLsqCount{};
+// Current players in the practice queue
+export std::list<std::string> g_playerPracQueue;
 
 // Reporting state variables
 //
@@ -143,7 +153,6 @@ std::string g_lastUpdatedPlayersMessageTable;
 dpp::message g_chatChPlayersMessage;
 // Current players table message in the player-table channel
 dpp::message g_tableChPlayersMessage;
-
 
 // Container
 dpp::role_map g_roles;  // Discord roles for translating mentions
@@ -948,7 +957,10 @@ MessageList getPlayersTable(bool isForDiscobotChannel)
     uint32_t playerWidth{ tableWidth - squadWidth - 2 };
     MessageList retMessages;
 
-    retMessages.push_back(format("\x1b[0mArena: \x1b[34m{}", g_arena));
+    if (!g_isNexusEnabled)
+        retMessages.push_back(format("\x1b[0mArena: \x1b[34m{}", g_arena));
+    else
+        retMessages.push_back(format("\x1b[0mArena: \x1b[30m{}", g_arena));
 
     // print the stats of team 100
     if (g_team100Stats.size() > 0) {
@@ -1024,17 +1036,43 @@ MessageList getPlayersTable(bool isForDiscobotChannel)
 
         retMessages.push_back(std::format("\x1b[31m{} {}",
             std::string(tableWidth - specCountStr.length(), '-'), spectators.size()));
-        
+
+        // add spectators that are in the prac queue
+        for (const std::string& player : g_playerPracQueue) {
+            if (std::find(spectators.begin(), spectators.end(), player) ==
+                spectators.end()) {
+                continue;
+            }
+
+            std::string squadName{ trim(g_playerInfos[player]) };
+
+            if (!squadName.empty()) {
+                squadName = "\x1b[30m" + padRight(g_playerInfos[player],
+                    squadWidth).substr(0, squadWidth);
+            }
+
+            retMessages.push_back(
+                std::format("\x1b[34m> \x1b[34m{}\x1b[0m {}",
+                    padRight(player, playerWidth).substr(0, playerWidth), squadName));
+        }
+
+        // add spectators that are not in the prac queue
         for (const std::string& player : spectators) {
+            if (std::find(g_playerPracQueue.begin(), g_playerPracQueue.end(), player) != 
+                g_playerPracQueue.end()) {
+                continue;
+            }
+
             std::string squadName{ trim(g_playerInfos[player]) };
 
             if (!squadName.empty()) {
                 squadName = "\x1b[30m" + padRight(g_playerInfos[player], 
                     squadWidth).substr(0, squadWidth);
             }
+
             retMessages.push_back(
-                std::format("\x1b[32ms \x1b[33m{}\x1b[0m {}", 
-                padRight(player, playerWidth).substr(0, playerWidth),  squadName));
+                std::format("\x1b[32ms \x1b[33m{}\x1b[0m {}",
+                    padRight(player, playerWidth).substr(0, playerWidth), squadName));
         }
     }
 
@@ -1290,6 +1328,8 @@ export void handleEventChat(ChatMode chatMode, std::string_view player, std::str
     // from the Chaos-Bot.
     if (!player.starts_with(c_discordBotName) && !player.starts_with(g_chaosBotName)
         // for Nexus there is not Bot we message to, but always the server itself
+        && !msg.starts_with("lsqueue")
+        && g_parseLsqCount == 0
         && !player.starts_with(std::format(":{}:", g_dzBotName))
         && !msg.starts_with("Freq ")) {
         sendMessage(msg, chatMode, player);

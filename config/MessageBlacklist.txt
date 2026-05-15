@@ -32,6 +32,8 @@ games times go from
 sbt skill ranges to
 a special Event
 welcome to subspace nexus
-use ?next to play in the next
-to join public arena Matchmaking
+use ?next to play
+to join public arena
 king of the hill
+next prac will select
+flag game reset
