@@ -960,7 +960,7 @@ MessageList getPlayersTable(bool isForDiscobotChannel)
     if (!g_isNexusEnabled)
         retMessages.push_back(format("\x1b[0mArena: \x1b[34m{}", g_arena));
     else
-        retMessages.push_back(format("\x1b[0mArena: \x1b[30m{}", g_arena));
+        retMessages.push_back(format("\x1b[0mArena: \x1b[2;37m{}", g_arena));
 
     // print the stats of team 100
     if (g_team100Stats.size() > 0) {
@@ -1047,7 +1047,7 @@ MessageList getPlayersTable(bool isForDiscobotChannel)
             std::string squadName{ trim(g_playerInfos[player]) };
 
             if (!squadName.empty()) {
-                squadName = "\x1b[30m" + padRight(g_playerInfos[player],
+                squadName = "\x1b[2;37m" + padRight(g_playerInfos[player],
                     squadWidth).substr(0, squadWidth);
             }
 
@@ -1066,7 +1066,7 @@ MessageList getPlayersTable(bool isForDiscobotChannel)
             std::string squadName{ trim(g_playerInfos[player]) };
 
             if (!squadName.empty()) {
-                squadName = "\x1b[30m" + padRight(g_playerInfos[player], 
+                squadName = "\x1b[2;37m" + padRight(g_playerInfos[player], 
                     squadWidth).substr(0, squadWidth);
             }
 

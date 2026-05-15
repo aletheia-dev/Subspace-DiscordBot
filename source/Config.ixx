@@ -24,7 +24,7 @@ export typedef std::pair<uint32_t, std::string> OperatorInfo;
 
 // Constants
 //
-export const std::string c_version{ "1.7.7" };  // app version
+export const std::string c_version{ "1.7.8" };  // app version
 export const std::string c_configFileName{ "DiscordBot.INI" };  // bot configuration file name
 export const std::string c_perstDataFileName{ "PersistentData.INI" };  // persistent data filename
 export const size_t c_chatNameLength{ 10 };  // chat name length
@@ -76,7 +76,7 @@ export bool g_isRecordingEnabled{};
 export bool g_isReportingEnabled{};
 // True, if message transfer to and from Discord is disabled with discord type "continuum"
 export bool g_isContinuumEnabled{};
-// True, if discord type is "nexus"
+// True, if discord server type is "nexus"
 export bool g_isNexusEnabled{};
 
 

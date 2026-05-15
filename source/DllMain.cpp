@@ -1,7 +1,6 @@
 //#pragma warning(disable: 4251)
 #define WINDOWS_LEAN_AND_MEAN
 #include <windows.h>
-//#include <dpp/dpp.h>
 #include <memory>
 
 import <string>;
@@ -76,13 +75,13 @@ extern "C" _declspec(dllexport) void force()
 
 
 /// <summary>
-/// Process log file observation and task handling until a time-consuming task has been finished
+/// Process log file observation and task handling until a time-consuming task has been finished.
 /// <returns>True, if the bot is still active, or false, in case the bot shut down die to a 
 /// connection loss.</returns>
 /// </summary>
 extern "C" _declspec(dllexport) uint32_t process()
 {
-    bool taskFinished = false;
+    bool taskFinished{};
     std::string logMsg;
 
     while (g_isStarted && !taskFinished) {
