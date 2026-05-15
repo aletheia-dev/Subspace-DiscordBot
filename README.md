@@ -1,2 +1,2 @@
 # Subspace-DiscordBot
-An application for connecting Subspace/Continuum to Discord.
+An application for connecting the multiplayer online game Subspace/Continuum to Discord.
